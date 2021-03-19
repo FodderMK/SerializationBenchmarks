@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarks", "Benchmarks\Benchmarks.csproj", "{1A113226-3D9A-48D5-B74F-9A3E918490FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlatBuffers", "FlatBuffers\FlatBuffers.csproj", "{6852828B-4379-4DF3-AD8D-A0DAAA31D85D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A113226-3D9A-48D5-B74F-9A3E918490FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A113226-3D9A-48D5-B74F-9A3E918490FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A113226-3D9A-48D5-B74F-9A3E918490FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A113226-3D9A-48D5-B74F-9A3E918490FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6852828B-4379-4DF3-AD8D-A0DAAA31D85D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6852828B-4379-4DF3-AD8D-A0DAAA31D85D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6852828B-4379-4DF3-AD8D-A0DAAA31D85D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6852828B-4379-4DF3-AD8D-A0DAAA31D85D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
