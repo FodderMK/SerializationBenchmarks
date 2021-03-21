@@ -1,12 +1,13 @@
-﻿using BenchmarkDotNet.Running;
-
-namespace Benchmark
+﻿namespace Benchmark
 {
     internal static class Program
     {
         static void Main(string[] args)
         {
-            new BenchmarkSuite().QuickRun();
+            if (new BenchmarkSuite().Verify() == false) {
+                return;
+            }
+
             // BenchmarkRunner.Run<BenchmarkSuite>(Configuration.BenchmarkConfig);
             new BenchmarkSuite().JustSizes();
         }

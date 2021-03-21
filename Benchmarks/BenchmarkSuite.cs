@@ -22,13 +22,31 @@ namespace Benchmark
         public void QuickRun()
         {
             var methods = typeof(BenchmarkSuite).GetMethods();
-                foreach (var method in methods) {
-                    var attrs = method.GetCustomAttributes(true);
-                    foreach (var attr in attrs) {
-                        if (attr.GetType() != typeof(BenchmarkAttribute)) continue;
-                        var bytes = (byte[])method.Invoke(this, new object?[] { this.ToBeSerialized[0] });
-                    }
+            foreach (var method in methods) {
+                var attrs = method.GetCustomAttributes(true);
+                foreach (var attr in attrs) {
+                    if (attr.GetType() != typeof(BenchmarkAttribute)) continue;
+                    var bytes = (byte[])method.Invoke(this, new object?[] { this.ToBeSerialized[0] });
                 }
+            }
+        }
+
+        public bool Verify()
+        {
+            var isValid = true;
+            var rawData = this.ToBeSerialized[0];
+
+            if (flatBuffers.Verify(rawData) == false) {
+                Console.WriteLine("FlatBuffers validation failed.");
+                isValid = false;
+            }
+
+            if (newtonsoftJson.Verify(rawData) == false) {
+                Console.WriteLine("NewtonsoftJson validation failed.");
+                isValid = false;
+            }
+
+            return isValid;
         }
 
         public void JustSizes()

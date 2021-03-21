@@ -6,6 +6,7 @@ namespace Benchmark
     public class FlatbuffersBenchmark
     {
         private FlatBufferBuilder fbb = new(1024);
+
         public byte[] Benchmark(ToBeSerialized rawData)
         {
             var builder = this.fbb;
@@ -38,6 +39,15 @@ namespace Benchmark
             BigData.AddSmallData(builder, smallData);
             builder.Finish(BigData.EndBigData(builder).Value);
             return builder.SizedByteArray();
+        }
+
+        public bool Verify(ToBeSerialized rawData)
+        {
+            var serialized = this.Benchmark(rawData);
+            var serializedCompressed = Utilities.GzipCompress(serialized);
+            var serializedUncompressed = Utilities.GzipDecompress(serializedCompressed);
+            var unserialized = BigData.GetRootAsBigData(new ByteBuffer(serializedUncompressed));
+            return unserialized.StringValue == rawData.StringValue;
         }
     }
 }

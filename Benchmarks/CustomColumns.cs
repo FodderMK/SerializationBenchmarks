@@ -1,64 +1,10 @@
 using System;
-using System.IO;
-using System.IO.Compression;
-using System.Text;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 
 namespace Benchmark
 {
-    public static class ColumnHelper
-    {
-        private static readonly string[] SizeSuffixes = { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-
-        public static string SizeSuffix(long value, int decimalPlaces = 1)
-        {
-            if (value < 0) {
-                return "-" + SizeSuffix(-value, decimalPlaces);
-            }
-
-            int i = 0;
-            decimal dValue = value;
-            while (Math.Round(dValue, decimalPlaces) >= 1000) {
-                dValue /= 1024;
-                i++;
-            }
-
-            return string.Format("{0:n" + decimalPlaces + "} {1}", dValue, SizeSuffixes[i]);
-        }
-
-        public static bool TryGetBytes(BenchmarkCase benchmarkCase, out byte[] bytes)
-        {
-            var method = benchmarkCase.Descriptor.WorkloadMethod;
-            if (method.ReturnType == typeof(byte[])) {
-                var obj = Activator.CreateInstance(benchmarkCase.Descriptor.Type, null);
-                bytes = (byte[])method.Invoke(obj, new[] { benchmarkCase.Parameters[0].Value });
-                return true;
-            }
-
-            bytes = Array.Empty<byte>();
-            return false;
-        }
-
-        public static byte[] GzipCompress(byte[] bytes)
-        {
-            using var outputStream = new MemoryStream();
-            using var gzipStream = new GZipStream(outputStream, CompressionMode.Compress);
-            gzipStream.Write(bytes, 0, bytes.Length);
-            return outputStream.ToArray();
-        }
-
-        public static byte[] GzipDecompress(byte[] bytes)
-        {
-            using var inputStream = new MemoryStream(bytes);
-            using var gzipStream = new GZipStream(inputStream, CompressionMode.Decompress);
-            using var outputStream = new MemoryStream();
-            gzipStream.CopyTo(outputStream);
-            return outputStream.ToArray();
-        }
-    }
-
     public class SerializedSize : IColumn
     {
         public string Id => nameof(SerializedSize);
@@ -76,7 +22,7 @@ namespace Benchmark
 
         public string GetValue(Summary summary, BenchmarkCase benchmarkCase, SummaryStyle style)
         {
-            if (ColumnHelper.TryGetBytes(benchmarkCase, out byte[] bytes) == false) {
+            if (Utilities.TryGetBytes(benchmarkCase, out byte[] bytes) == false) {
                 return "--";
             }
 
@@ -85,7 +31,7 @@ namespace Benchmark
 
         public string GetValue(byte[] bytes)
         {
-            return $"{ColumnHelper.SizeSuffix(bytes.Length, 2)}";
+            return $"{Utilities.SizeSuffix(bytes.Length, 2)}";
         }
     }
 
@@ -106,7 +52,7 @@ namespace Benchmark
 
         public string GetValue(Summary summary, BenchmarkCase benchmarkCase, SummaryStyle style)
         {
-            if (ColumnHelper.TryGetBytes(benchmarkCase, out byte[] bytes) == false) {
+            if (Utilities.TryGetBytes(benchmarkCase, out byte[] bytes) == false) {
                 return "--";
             }
 
@@ -115,8 +61,8 @@ namespace Benchmark
 
         public string GetValue(byte[] bytes)
         {
-            var compressed = ColumnHelper.GzipCompress(bytes);
-            return ColumnHelper.SizeSuffix(compressed.Length, 2);
+            var compressed = Utilities.GzipCompress(bytes);
+            return Utilities.SizeSuffix(compressed.Length, 2);
         }
     }
 
@@ -137,7 +83,7 @@ namespace Benchmark
 
         public string GetValue(Summary summary, BenchmarkCase benchmarkCase, SummaryStyle style)
         {
-            if (ColumnHelper.TryGetBytes(benchmarkCase, out byte[] bytes) == false) {
+            if (Utilities.TryGetBytes(benchmarkCase, out byte[] bytes) == false) {
                 return "--";
             }
 
@@ -146,9 +92,9 @@ namespace Benchmark
 
         public string GetValue(byte[] bytes)
         {
-            var compressed = ColumnHelper.GzipCompress(bytes);
+            var compressed = Utilities.GzipCompress(bytes);
             var encoded = Convert.ToBase64String(compressed);
-            return ColumnHelper.SizeSuffix(encoded.Length, 2);
+            return Utilities.SizeSuffix(encoded.Length, 2);
         }
     }
 }
