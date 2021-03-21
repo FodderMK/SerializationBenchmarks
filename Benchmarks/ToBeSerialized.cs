@@ -8,22 +8,24 @@ namespace Benchmark
         public int IntValue { get; set; }
         public bool BoolValue { get; set; }
         public string StringValue { get; set; }
+        public double DoubleValue { get; set; }
         public SubDataToBeSerialized[] SubData { get; set; }
         public short[] SmallData { get; set; }
 
-        public static ToBeSerialized Create(int rows)
+        public static ToBeSerialized Create(int rows, string defaultString = Configuration.DefaultString)
         {
             var output = new ToBeSerialized {
                 IntValue = 1,
                 BoolValue = true,
-                StringValue = Configuration.DefaultString,
+                StringValue = defaultString,
+                DoubleValue = 1e120,
                 SubData = new SubDataToBeSerialized[rows],
                 SmallData = new short[rows]
             };
 
             for (var i = 0; i < rows; i++) {
                 output.SubData[i] = new SubDataToBeSerialized {
-                    StringValue = Configuration.DefaultString,
+                    StringValue = defaultString,
                     IntValue = i
                 };
 
@@ -31,6 +33,11 @@ namespace Benchmark
             }
 
             return output;
+        }
+
+        public override string ToString()
+        {
+            return "TBS " + ("[" + this.StringValue.Length + "]").PadLeft(4, ' ');
         }
     }
 

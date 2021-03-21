@@ -32,7 +32,7 @@ namespace Benchmark
             var method = benchmarkCase.Descriptor.WorkloadMethod;
             if (method.ReturnType == typeof(byte[])) {
                 var obj = Activator.CreateInstance(benchmarkCase.Descriptor.Type, null);
-                bytes = (byte[])method.Invoke(obj, null);
+                bytes = (byte[])method.Invoke(obj, new[] { benchmarkCase.Parameters[0].Value });
                 return true;
             }
 
@@ -62,6 +62,11 @@ namespace Benchmark
                 return "--";
             }
 
+            return this.GetValue(bytes);
+        }
+
+        public string GetValue(byte[] bytes)
+        {
             return $"{ColumnHelper.SizeSuffix(bytes.Length, 2)}";
         }
     }
@@ -87,6 +92,11 @@ namespace Benchmark
                 return "--";
             }
 
+            return this.GetValue(bytes);
+        }
+
+        public string GetValue(byte[] bytes)
+        {
             using var compressedStream = new MemoryStream();
             using var zipStream = new GZipStream(compressedStream, CompressionMode.Compress);
             zipStream.Write(bytes, 0, bytes.Length);
@@ -116,6 +126,11 @@ namespace Benchmark
                 return "--";
             }
 
+            return this.GetValue(bytes);
+        }
+
+        public string GetValue(byte[] bytes)
+        {
             using var compressedStream = new MemoryStream();
             using var zipStream = new GZipStream(compressedStream, CompressionMode.Compress);
             zipStream.Write(bytes, 0, bytes.Length);

@@ -5,11 +5,9 @@ namespace Benchmark
 {
     public class NewtonsoftJsonBenchmark
     {
-        private ToBeSerialized toBeSerialized = ToBeSerialized.Create(Configuration.Rows);
-
-        public byte[] Benchmark()
+        public byte[] Benchmark(ToBeSerialized rawData)
         {
-            var json = JsonConvert.SerializeObject(this.toBeSerialized, Formatting.None);
+            var json = JsonConvert.SerializeObject(rawData, Formatting.None);
             return Encoding.UTF8.GetBytes(json);
         }
     }

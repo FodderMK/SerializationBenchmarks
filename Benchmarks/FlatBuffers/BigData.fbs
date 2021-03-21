@@ -9,6 +9,7 @@ table BigData {
     IntValue:int;
     BoolValue:bool;
     StringValue:string;
+    DoubleValue:double;
     SubData:[SubData];
     SmallData:[SmallData];
 }

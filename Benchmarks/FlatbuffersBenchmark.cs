@@ -6,12 +6,9 @@ namespace Benchmark
     public class FlatbuffersBenchmark
     {
         private FlatBufferBuilder fbb = new(1024);
-        private ToBeSerialized toBeSerialized = ToBeSerialized.Create(Configuration.Rows);
-
-        public byte[] Benchmark()
+        public byte[] Benchmark(ToBeSerialized rawData)
         {
             var builder = this.fbb;
-            var rawData = this.toBeSerialized;
 
             builder.Clear();
 
@@ -36,6 +33,7 @@ namespace Benchmark
             BigData.AddIntValue(builder, rawData.IntValue);
             BigData.AddBoolValue(builder, rawData.BoolValue);
             BigData.AddStringValue(builder, stringValue);
+            BigData.AddDoubleValue(builder, rawData.DoubleValue);
             BigData.AddSubData(builder, subDataVector);
             BigData.AddSmallData(builder, smallData);
             builder.Finish(BigData.EndBigData(builder).Value);

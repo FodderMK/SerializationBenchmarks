@@ -35,18 +35,21 @@ public struct BigData : IFlatbufferObject
   public ArraySegment<byte>? GetStringValueBytes() { return __p.__vector_as_arraysegment(8); }
 #endif
   public byte[] GetStringValueArray() { return __p.__vector_as_array<byte>(8); }
-  public SerializationTests.FlatBuffers.SubData? SubData(int j) { int o = __p.__offset(10); return o != 0 ? (SerializationTests.FlatBuffers.SubData?)(new SerializationTests.FlatBuffers.SubData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
-  public int SubDataLength { get { int o = __p.__offset(10); return o != 0 ? __p.__vector_len(o) : 0; } }
-  public SerializationTests.FlatBuffers.SmallData? SmallData(int j) { int o = __p.__offset(12); return o != 0 ? (SerializationTests.FlatBuffers.SmallData?)(new SerializationTests.FlatBuffers.SmallData()).__assign(__p.__vector(o) + j * 2, __p.bb) : null; }
-  public int SmallDataLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public double DoubleValue { get { int o = __p.__offset(10); return o != 0 ? __p.bb.GetDouble(o + __p.bb_pos) : (double)0.0; } }
+  public SerializationTests.FlatBuffers.SubData? SubData(int j) { int o = __p.__offset(12); return o != 0 ? (SerializationTests.FlatBuffers.SubData?)(new SerializationTests.FlatBuffers.SubData()).__assign(__p.__indirect(__p.__vector(o) + j * 4), __p.bb) : null; }
+  public int SubDataLength { get { int o = __p.__offset(12); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public SerializationTests.FlatBuffers.SmallData? SmallData(int j) { int o = __p.__offset(14); return o != 0 ? (SerializationTests.FlatBuffers.SmallData?)(new SerializationTests.FlatBuffers.SmallData()).__assign(__p.__vector(o) + j * 2, __p.bb) : null; }
+  public int SmallDataLength { get { int o = __p.__offset(14); return o != 0 ? __p.__vector_len(o) : 0; } }
 
   public static Offset<SerializationTests.FlatBuffers.BigData> CreateBigData(FlatBufferBuilder builder,
       int IntValue = 0,
       bool BoolValue = false,
       StringOffset StringValueOffset = default(StringOffset),
+      double DoubleValue = 0.0,
       VectorOffset SubDataOffset = default(VectorOffset),
       VectorOffset SmallDataOffset = default(VectorOffset)) {
-    builder.StartTable(5);
+    builder.StartTable(6);
+    BigData.AddDoubleValue(builder, DoubleValue);
     BigData.AddSmallData(builder, SmallDataOffset);
     BigData.AddSubData(builder, SubDataOffset);
     BigData.AddStringValue(builder, StringValueOffset);
@@ -55,15 +58,16 @@ public struct BigData : IFlatbufferObject
     return BigData.EndBigData(builder);
   }
 
-  public static void StartBigData(FlatBufferBuilder builder) { builder.StartTable(5); }
+  public static void StartBigData(FlatBufferBuilder builder) { builder.StartTable(6); }
   public static void AddIntValue(FlatBufferBuilder builder, int IntValue) { builder.AddInt(0, IntValue, 0); }
   public static void AddBoolValue(FlatBufferBuilder builder, bool BoolValue) { builder.AddBool(1, BoolValue, false); }
   public static void AddStringValue(FlatBufferBuilder builder, StringOffset StringValueOffset) { builder.AddOffset(2, StringValueOffset.Value, 0); }
-  public static void AddSubData(FlatBufferBuilder builder, VectorOffset SubDataOffset) { builder.AddOffset(3, SubDataOffset.Value, 0); }
+  public static void AddDoubleValue(FlatBufferBuilder builder, double DoubleValue) { builder.AddDouble(3, DoubleValue, 0.0); }
+  public static void AddSubData(FlatBufferBuilder builder, VectorOffset SubDataOffset) { builder.AddOffset(4, SubDataOffset.Value, 0); }
   public static VectorOffset CreateSubDataVector(FlatBufferBuilder builder, Offset<SerializationTests.FlatBuffers.SubData>[] data) { builder.StartVector(4, data.Length, 4); for (int i = data.Length - 1; i >= 0; i--) builder.AddOffset(data[i].Value); return builder.EndVector(); }
   public static VectorOffset CreateSubDataVectorBlock(FlatBufferBuilder builder, Offset<SerializationTests.FlatBuffers.SubData>[] data) { builder.StartVector(4, data.Length, 4); builder.Add(data); return builder.EndVector(); }
   public static void StartSubDataVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(4, numElems, 4); }
-  public static void AddSmallData(FlatBufferBuilder builder, VectorOffset SmallDataOffset) { builder.AddOffset(4, SmallDataOffset.Value, 0); }
+  public static void AddSmallData(FlatBufferBuilder builder, VectorOffset SmallDataOffset) { builder.AddOffset(5, SmallDataOffset.Value, 0); }
   public static void StartSmallDataVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(2, numElems, 2); }
   public static Offset<SerializationTests.FlatBuffers.BigData> EndBigData(FlatBufferBuilder builder) {
     int o = builder.EndTable();
