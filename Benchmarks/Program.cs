@@ -2,12 +2,13 @@
 
 namespace Benchmark
 {
-    class Program
+    internal static class Program
     {
         static void Main(string[] args)
         {
             new BenchmarkSuite().QuickRun();
-            BenchmarkRunner.Run<BenchmarkSuite>(Configuration.BenchmarkConfig);
+            // BenchmarkRunner.Run<BenchmarkSuite>(Configuration.BenchmarkConfig);
+            new BenchmarkSuite().JustSizes();
         }
     }
 }

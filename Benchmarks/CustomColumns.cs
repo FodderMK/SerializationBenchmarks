@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.IO.Compression;
+using System.Text;
 using BenchmarkDotNet.Columns;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
@@ -38,6 +39,23 @@ namespace Benchmark
 
             bytes = Array.Empty<byte>();
             return false;
+        }
+
+        public static byte[] GzipCompress(byte[] bytes)
+        {
+            using var outputStream = new MemoryStream();
+            using var gzipStream = new GZipStream(outputStream, CompressionMode.Compress);
+            gzipStream.Write(bytes, 0, bytes.Length);
+            return outputStream.ToArray();
+        }
+
+        public static byte[] GzipDecompress(byte[] bytes)
+        {
+            using var inputStream = new MemoryStream(bytes);
+            using var gzipStream = new GZipStream(inputStream, CompressionMode.Decompress);
+            using var outputStream = new MemoryStream();
+            gzipStream.CopyTo(outputStream);
+            return outputStream.ToArray();
         }
     }
 
@@ -97,10 +115,7 @@ namespace Benchmark
 
         public string GetValue(byte[] bytes)
         {
-            using var compressedStream = new MemoryStream();
-            using var zipStream = new GZipStream(compressedStream, CompressionMode.Compress);
-            zipStream.Write(bytes, 0, bytes.Length);
-            var compressed = compressedStream.ToArray();
+            var compressed = ColumnHelper.GzipCompress(bytes);
             return ColumnHelper.SizeSuffix(compressed.Length, 2);
         }
     }
@@ -131,10 +146,7 @@ namespace Benchmark
 
         public string GetValue(byte[] bytes)
         {
-            using var compressedStream = new MemoryStream();
-            using var zipStream = new GZipStream(compressedStream, CompressionMode.Compress);
-            zipStream.Write(bytes, 0, bytes.Length);
-            var compressed = compressedStream.ToArray();
+            var compressed = ColumnHelper.GzipCompress(bytes);
             var encoded = Convert.ToBase64String(compressed);
             return ColumnHelper.SizeSuffix(encoded.Length, 2);
         }
