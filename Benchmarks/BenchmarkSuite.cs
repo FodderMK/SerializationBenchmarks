@@ -37,6 +37,15 @@ namespace Benchmark
             var paramString = new List<string>();
             var valueString = new List<string>();
 
+            var alternateColors = new[] {
+                ConsoleColor.Cyan,
+                ConsoleColor.Magenta
+            };
+
+            var colors = new List<ConsoleColor> {
+                ConsoleColor.White
+            };
+
             var serializedColumn = new SerializedSize();
             var gzipColumn = new GzipSize();
             var gzipB64Column = new GzipBase64Size();
@@ -46,12 +55,14 @@ namespace Benchmark
             valueString.Add($"{serializedColumn.ColumnName} | {gzipColumn.ColumnName} | {gzipB64Column.ColumnName}");
 
             var methods = typeof(BenchmarkSuite).GetMethods();
-            foreach (var rawData in this.ToBeSerialized) {
+            for (int i = 0; i < this.ToBeSerialized.Length; i++) {
+                var rawData = this.ToBeSerialized[i];
                 foreach (var method in methods) {
                     var attrs = method.GetCustomAttributes(true);
                     foreach (var attr in attrs) {
                         if (attr.GetType() != typeof(BenchmarkAttribute)) continue;
                         var bytes = (byte[])method.Invoke(this, new object?[] { rawData });
+                        colors.Add(alternateColors[i % alternateColors.Length]);
                         methodString.Add(method.Name);
                         paramString.Add(rawData.ToString());
 
@@ -67,6 +78,7 @@ namespace Benchmark
             var paramPadding = paramString.Max(v => v.Length) + 1;
 
             for (int i = 0; i < methodString.Count; i++) {
+                Console.ForegroundColor = colors[i];
                 Console.WriteLine($"| {methodString[i].PadLeft(methodPadding)} | {paramString[i].PadLeft(paramPadding)} | {valueString[i]} |");
 
                 if (i == 0) {

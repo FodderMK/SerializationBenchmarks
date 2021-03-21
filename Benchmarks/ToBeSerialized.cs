@@ -25,7 +25,7 @@ namespace Benchmark
 
             for (var i = 0; i < rows; i++) {
                 output.SubData[i] = new SubDataToBeSerialized {
-                    StringValue = defaultString,
+                    StringValue = i + defaultString + i,
                     IntValue = i
                 };
 
