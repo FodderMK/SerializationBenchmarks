@@ -1,4 +1,6 @@
-﻿namespace Benchmark
+﻿using BenchmarkDotNet.Running;
+
+namespace Benchmark
 {
     internal static class Program
     {
@@ -8,8 +10,8 @@
                 return;
             }
 
-            // BenchmarkRunner.Run<BenchmarkSuite>(Configuration.BenchmarkConfig);
-            new BenchmarkSuite().JustSizes();
+            BenchmarkRunner.Run<BenchmarkSuite>(Configuration.BenchmarkConfig);
+            // new BenchmarkSuite().JustSizes();
         }
     }
 }

@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Security.Cryptography;
 
 namespace Benchmark
 {
@@ -12,12 +14,12 @@ namespace Benchmark
         public SubDataToBeSerialized[] SubData { get; set; }
         public short[] SmallData { get; set; }
 
-        public static ToBeSerialized Create(int rows, string defaultString = Configuration.DefaultString)
+        public static ToBeSerialized Create(int rows, int stringLength)
         {
             var output = new ToBeSerialized {
                 IntValue = 1,
                 BoolValue = true,
-                StringValue = defaultString,
+                StringValue = RandomString(stringLength),
                 DoubleValue = 1e120,
                 SubData = new SubDataToBeSerialized[rows],
                 SmallData = new short[rows]
@@ -25,7 +27,7 @@ namespace Benchmark
 
             for (var i = 0; i < rows; i++) {
                 output.SubData[i] = new SubDataToBeSerialized {
-                    StringValue = i + defaultString + i,
+                    StringValue = RandomString(stringLength),
                     IntValue = i
                 };
 
@@ -33,6 +35,13 @@ namespace Benchmark
             }
 
             return output;
+        }
+
+        private static string RandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[RandomNumberGenerator.GetInt32(s.Length)]).ToArray());
         }
 
         public override string ToString()

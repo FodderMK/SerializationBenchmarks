@@ -9,27 +9,16 @@ namespace Benchmark
     public class BenchmarkSuite
     {
         public ToBeSerialized[] ToBeSerialized { get; } = {
-            Benchmark.ToBeSerialized.Create(Configuration.Rows, "B"),
-            Benchmark.ToBeSerialized.Create(Configuration.Rows)
+            Benchmark.ToBeSerialized.Create(Configuration.Rows, Configuration.SmallStringLength),
+            Benchmark.ToBeSerialized.Create(Configuration.Rows, Configuration.LargeStringLength)
         };
 
         private static FlatbuffersBenchmark flatBuffers = new();
+        private static ProtobufBenchmark protobuf = new();
         private static NewtonsoftJsonBenchmark newtonsoftJson = new();
         private static MessagePackStringKeyBenchmark messagePackString = new();
         private static MessagePackIntKeyBenchmark messagePackInt = new();
         private static BinaryWriterBenchmark binaryWriter = new();
-
-        public void QuickRun()
-        {
-            var methods = typeof(BenchmarkSuite).GetMethods();
-            foreach (var method in methods) {
-                var attrs = method.GetCustomAttributes(true);
-                foreach (var attr in attrs) {
-                    if (attr.GetType() != typeof(BenchmarkAttribute)) continue;
-                    var bytes = (byte[])method.Invoke(this, new object?[] { this.ToBeSerialized[0] });
-                }
-            }
-        }
 
         public bool Verify()
         {
@@ -38,6 +27,11 @@ namespace Benchmark
 
             if (flatBuffers.Verify(rawData) == false) {
                 Console.WriteLine("FlatBuffers validation failed.");
+                isValid = false;
+            }
+
+            if (protobuf.Verify(rawData) == false) {
+                Console.WriteLine("Protobuf validation failed.");
                 isValid = false;
             }
 
@@ -110,6 +104,13 @@ namespace Benchmark
         public byte[] FlatBuffers(ToBeSerialized rawData)
         {
             return flatBuffers.Benchmark(rawData);
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(ToBeSerialized))]
+        public byte[] Protobuf(ToBeSerialized rawData)
+        {
+            return protobuf.Benchmark(rawData);
         }
 
         [Benchmark]

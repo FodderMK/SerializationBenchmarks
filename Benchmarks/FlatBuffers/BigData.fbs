@@ -1,10 +1,5 @@
 namespace SerializationTests.FlatBuffers;
 
-enum Thing:ubyte {
-    InA,
-    Bag
-}
-
 table BigData {
     IntValue:int;
     BoolValue:bool;

@@ -9,12 +9,6 @@ using global::System;
 using global::System.Collections.Generic;
 using global::FlatBuffers;
 
-public enum Thing : byte
-{
-  InA = 0,
-  Bag = 1,
-};
-
 public struct BigData : IFlatbufferObject
 {
   private Table __p;

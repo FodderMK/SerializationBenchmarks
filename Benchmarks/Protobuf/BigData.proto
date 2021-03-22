@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package SerializationTests.Protobuf;
+
+message BigData {
+  int32 IntValue = 1;
+  bool BoolValue = 2;
+  string StringValue = 3;
+  double DoubleValue = 4;
+  repeated SubData SubData = 5;
+  repeated SmallData SmallData = 6;
+}
+
+message SubData {
+  string StringValue = 1;
+  int32 IntValue = 2;
+}
+
+message SmallData {
+  int32 ShortValue = 1;
+}

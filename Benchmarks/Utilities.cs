@@ -38,6 +38,11 @@ namespace Benchmark
             return false;
         }
 
+        public static byte[] GzipCompressAndDecompress(byte[] bytes)
+        {
+            return GzipDecompress(GzipCompress(bytes));
+        }
+
         public static byte[] GzipCompress(byte[] bytes)
         {
             using var inputStream = new MemoryStream(bytes);
