@@ -69,7 +69,7 @@ namespace Benchmark
     public class GzipBase64Size : IColumn
     {
         public string Id => nameof(GzipBase64Size);
-        public string ColumnName => "Serialized [gzip-b64]";
+        public string ColumnName => "Serialized [gzip_b64]";
         public bool AlwaysShow => true;
         public ColumnCategory Category => ColumnCategory.Baseline;
         public int PriorityInCategory => 12;
