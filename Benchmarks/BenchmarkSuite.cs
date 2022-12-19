@@ -16,8 +16,10 @@ namespace Benchmark
         private static FlatBuffersBenchmark flatBuffers = new();
         private static ProtobufBenchmark protobuf = new();
         private static NewtonsoftJsonBenchmark newtonsoftJson = new();
+        private static SystemTextJsonBenchmark systemTextJson = new();
         private static MessagePackStringKeyBenchmark messagePackString = new();
         private static MessagePackIntKeyBenchmark messagePackInt = new();
+        private static MemoryPackBenchmark memoryPack = new();
         private static BinaryWriterBenchmark binaryWriter = new();
 
         public bool Verify()
@@ -37,6 +39,16 @@ namespace Benchmark
 
             if (newtonsoftJson.Verify(rawData) == false) {
                 Console.WriteLine("NewtonsoftJson validation failed.");
+                isValid = false;
+            }
+
+            if (systemTextJson.Verify(rawData) == false) {
+                Console.WriteLine("SystemTextJson validation failed.");
+                isValid = false;
+            }
+
+            if (memoryPack.Verify(rawData) == false) {
+                Console.WriteLine("MemoryPack validation failed.");
                 isValid = false;
             }
 
@@ -122,6 +134,13 @@ namespace Benchmark
 
         [Benchmark]
         [ArgumentsSource(nameof(ToBeSerialized))]
+        public byte[] SystemTextJson(ToBeSerialized rawData)
+        {
+            return systemTextJson.Benchmark(rawData);
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(ToBeSerialized))]
         public byte[] MessagePackString(ToBeSerialized rawData)
         {
             return messagePackString.Benchmark(rawData);
@@ -132,6 +151,13 @@ namespace Benchmark
         public byte[] MessagePackInt(ToBeSerialized rawData)
         {
             return messagePackInt.Benchmark(rawData);
+        }
+
+        [Benchmark]
+        [ArgumentsSource(nameof(ToBeSerialized))]
+        public byte[] MemoryPack(ToBeSerialized rawData)
+        {
+            return memoryPack.Benchmark(rawData);
         }
 
         [Benchmark]
