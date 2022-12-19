@@ -1,9 +1,9 @@
-using FlatBuffers;
+using Google.FlatBuffers;
 using SerializationTests.FlatBuffers;
 
 namespace Benchmark
 {
-    public class FlatbuffersBenchmark
+    public class FlatBuffersBenchmark
     {
         private FlatBufferBuilder fbb = new(1024);
 

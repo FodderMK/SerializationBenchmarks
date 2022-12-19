@@ -4,7 +4,7 @@ namespace Benchmark
 {
     internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
             if (new BenchmarkSuite().Verify() == false) {
                 return;

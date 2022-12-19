@@ -1,21 +1,21 @@
 namespace SerializationTests.FlatBuffers;
 
 table BigData {
-    IntValue:int;
-    BoolValue:bool;
-    StringValue:string;
-    DoubleValue:double;
-    SubData:[SubData];
-    SmallData:[SmallData];
+    int_value:int;
+    bool_value:bool;
+    string_value:string;
+    double_value:double;
+    sub_data:[SubData];
+    small_data:[SmallData];
 }
 
 table SubData {
-   StringValue:string;
-   IntValue:int;
+   string_value:string;
+   int_value:int;
 }
 
 struct SmallData {
-    ShortValue:short;
+    short_value:short;
 }
 
 root_type BigData;

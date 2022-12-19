@@ -13,7 +13,7 @@ namespace Benchmark
             Benchmark.ToBeSerialized.Create(Configuration.Rows, Configuration.LargeStringLength)
         };
 
-        private static FlatbuffersBenchmark flatBuffers = new();
+        private static FlatBuffersBenchmark flatBuffers = new();
         private static ProtobufBenchmark protobuf = new();
         private static NewtonsoftJsonBenchmark newtonsoftJson = new();
         private static MessagePackStringKeyBenchmark messagePackString = new();
